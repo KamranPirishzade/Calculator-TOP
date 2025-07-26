@@ -17,13 +17,13 @@ function divide(a, b) {
 function checkAndCalculate() {
     switch (operator) {
         case "+":
-            firstNum = String(Math.floor(operate(+firstNum, +secondNum, add)*1000000)/1000000);
+            firstNum = String(Math.floor(operate(+firstNum, +secondNum, add) * 1000000) / 1000000);
             break;
         case "-":
-            firstNum = String(Math.floor(operate(+firstNum, +secondNum, subtract)*1000000)/1000000);
+            firstNum = String(Math.floor(operate(+firstNum, +secondNum, subtract) * 1000000) / 1000000);
             break;
         case "x":
-            firstNum = String(Math.floor(operate(+firstNum, +secondNum, multiply)*1000000)/1000000);
+            firstNum = String(Math.floor(operate(+firstNum, +secondNum, multiply) * 1000000) / 1000000);
             break;
         case "/":
             if (+secondNum === 0) {
@@ -31,7 +31,7 @@ function checkAndCalculate() {
                 reset()
                 break;
             }
-            firstNum = String(Math.floor(operate(+firstNum, +secondNum, divide)*1000000)/1000000);
+            firstNum = String(Math.floor(operate(+firstNum, +secondNum, divide) * 1000000) / 1000000);
             break;
         default:
             console.log("problem");
@@ -49,6 +49,7 @@ let firstNum = ""
 let secondNum = ""
 let currentNum = "first"
 let operator = "";
+let result = false;
 
 function updateScreen() {
     screenOperator.textContent = operator;
@@ -63,8 +64,8 @@ function operate(num1, num2, operation) {
 
 document.querySelectorAll(".operator").forEach((opr) => {
     opr.addEventListener("click", (e) => {
-        if (firstNum&&firstNum!=".") {
-            if (operator && secondNum && secondNum!=".") {
+        if (firstNum && firstNum != ".") {
+            if (operator && secondNum && secondNum != ".") {
                 checkAndCalculate();
                 operator = e.target.textContent;
             }
@@ -80,17 +81,31 @@ function getNumber(e, current) {
     firstNum = String(firstNum);
     secondNum = String(secondNum);
     if (current == "first") {
-        if (firstNum.includes(".") && e.target.textContent == ".") {
+        if (result) {
+            firstNum = e.target.textContent;
+            result=false;
+            updateScreen();
+        } else if (firstNum.includes(".") && e.target.textContent == ".") {
             return
+        } else {
+            firstNum += e.target.textContent
         }
-        firstNum += e.target.textContent
+
     } else {
         if (secondNum.includes(".") && e.target.textContent == ".") {
             return
         }
         secondNum += e.target.textContent
     }
+
     updateScreen()
+
+    if(firstNum=="06042006"||secondNum=="06042006"){
+        let answer=prompt("Are you ready?")
+        if(answer.toLowerCase()==="yes"){
+            alert("I love you ❤️\nHappy birthday to you!"); 
+        }
+    }
 }
 
 
@@ -104,7 +119,8 @@ document.querySelectorAll(".number").forEach(numBtn => {
 
 
 document.querySelector(".calculate").addEventListener("click", () => {
-    if (firstNum && secondNum && operator &&secondNum!==".") {
+    if (firstNum && secondNum && operator && secondNum !== ".") {
+        result = true;
         checkAndCalculate()
         updateScreen();
     }
@@ -127,8 +143,9 @@ function reset() {
     firstNum = "";
     secondNum = "";
     operator = "";
-    updateScreen()
     currentNum = "first"
+    result = 0
+    updateScreen()
 }
 
 
